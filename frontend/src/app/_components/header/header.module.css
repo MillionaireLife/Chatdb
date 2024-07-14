@@ -1,27 +1,14 @@
 .header {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 7.5rem;
+  background-color: rgb(240, 240, 240);
+}
+
+.header_right {
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  background-color: #f8f9fa;
-}
-
-.logo img {
-  height: 40px;
-}
-
-.dropdown {
-  display: flex;
-  padding: 5px;
-  font-size: 16px;
-  gap: 10px;
-}
-
-.settings img {
-  height: 30px;
-  cursor: pointer;
-}
-
-.select {
-  width: 11rem;
+  gap: 1rem;
 }

@@ -1,8 +1,9 @@
-import { Plus_Jakarta_Sans } from 'next/font/google';
 import { MantineProvider } from '@mantine/core';
+import { Plus_Jakarta_Sans } from 'next/font/google';
+
+import HeaderMenu from './_components/header/header';
 import '@mantine/core/styles.css';
 import './globals.css';
-import  HeaderMenu   from './_components/header/header';
 
 const plus_jakarta_sans = Plus_Jakarta_Sans({ subsets: ['latin'], preload: true });
 
@@ -16,7 +17,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={plus_jakarta_sans.className} suppressHydrationWarning={true}>
         <MantineProvider>
-          <HeaderMenu/>
+          <HeaderMenu />
           {children}
         </MantineProvider>
       </body>

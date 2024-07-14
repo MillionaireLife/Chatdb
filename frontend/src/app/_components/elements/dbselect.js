@@ -1,22 +1,23 @@
-"use client";
+'use client';
+
 import { Select } from '@mantine/core';
-import React from 'react'
+import React from 'react';
 import { DiDatabase } from 'react-icons/di';
-import styles from '../header/header.module.css';
 
 export const DBselect = () => {
   return (
     <>
       <Select
-        className={styles.select}
-        placeholder="Select Database"
-        data={['MySQL', 'mongoDB', 'SQLITE']}
+        data={['MySQL', 'MongoDB', 'PostgreSQL', 'SQLite']}
+        comboboxProps={{ shadow: 'md' }}
+        placeholder="Select a Database"
+        leftSection={<DiDatabase />}
+        checkIconPosition="right"
         allowDeselect
         searchable
-        nothingFoundMessage="Nothing found..."
-        checkIconPosition="right"
-        leftSection={<DiDatabase />}
+        maw={200}
+        pointer
       />
     </>
   );
-}
+};
