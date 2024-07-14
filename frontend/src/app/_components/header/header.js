@@ -5,7 +5,7 @@ import styles from './header.module.css';
 
 import { IoSettingsSharp } from 'react-icons/io5';
 import { DBselect } from '../elements/dbselect';
-import { ActionIcon } from '@mantine/core';
+import { ActionIcon, Tooltip } from '@mantine/core';
 
 const HeaderMenu = () => {
   return (
@@ -19,9 +19,11 @@ const HeaderMenu = () => {
           <DBselect />
 
           <Link href="/settings">
-            <ActionIcon variant="filled" color="dark" size="lg" radius="xl" aria-label="Settings">
-              <IoSettingsSharp style={{ width: '65%', height: '65%' }} />
-            </ActionIcon>
+            <Tooltip label="Settings" position="right" withArrow>
+              <ActionIcon variant="filled" color="dark" size="lg" radius="xl" aria-label="Settings">
+                <IoSettingsSharp style={{ width: '65%', height: '65%' }} />
+              </ActionIcon>
+            </Tooltip>
           </Link>
         </div>
       </header>
