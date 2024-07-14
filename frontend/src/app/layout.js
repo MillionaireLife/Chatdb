@@ -4,6 +4,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import HeaderMenu from './_components/header/header';
 import '@mantine/core/styles.css';
 import './globals.css';
+import Herobody from './_components/hero/hero';
 
 const plus_jakarta_sans = Plus_Jakarta_Sans({ subsets: ['latin'], preload: true });
 
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
       <body className={plus_jakarta_sans.className} suppressHydrationWarning={true}>
         <MantineProvider>
           <HeaderMenu />
+          <Herobody />
           {children}
         </MantineProvider>
       </body>
