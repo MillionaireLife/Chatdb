@@ -2,7 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './header.module.css';
-
 import { IoSettingsSharp } from 'react-icons/io5';
 import { DBselect } from '../elements/dbselect';
 import { ActionIcon, Tooltip } from '@mantine/core';

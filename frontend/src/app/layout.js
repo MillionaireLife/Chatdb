@@ -1,6 +1,5 @@
 import { MantineProvider } from '@mantine/core';
 import { Plus_Jakarta_Sans } from 'next/font/google';
-
 import HeaderMenu from './_components/header/header';
 import '@mantine/core/styles.css';
 import './globals.css';
