@@ -6,7 +6,7 @@ import { IoSettingsSharp } from 'react-icons/io5';
 import { DBselect } from '../elements/dbselect';
 import { ActionIcon, Tooltip } from '@mantine/core';
 
-const HeaderMenu = () => {
+export const HeaderMenu = () => {
   return (
     <>
       <header className={styles.header}>
@@ -29,5 +29,3 @@ const HeaderMenu = () => {
     </>
   );
 };
-
-export default HeaderMenu;

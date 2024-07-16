@@ -1,10 +1,10 @@
 import React from 'react';
-import { TextInput } from './_components/elements/textinput';
+import { HeroBody } from './_components/hero/hero';
 
 export const HomePage = () => {
   return (
     <>
-      <TextInput />
+      <HeroBody />
     </>
   );
 };
