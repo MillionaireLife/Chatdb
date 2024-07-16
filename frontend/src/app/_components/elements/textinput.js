@@ -17,8 +17,8 @@ export const TextInput = () => {
         pos={'fixed'}
         value={query}
         bg={'#f0f0f0'}
-        p={'12px 20px'}
-        rightSectionWidth={100}
+        p={'0.85rem 7.5rem'}
+        rightSectionWidth={300}
         rightSectionPointerEvents="all"
         placeholder="Enter your query here..."
         onChange={(e) => setQuery(e.currentTarget.value)}
