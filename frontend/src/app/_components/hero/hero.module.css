@@ -1,0 +1,17 @@
+.heroContainer {
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(240, 240, 240);
+  height: 90vh; 
+}
+
+.heroTitle {
+  padding: 0.75rem 7.5rem;
+}
+
+.heroSubtitle {
+  padding: 0.75rem 7.5rem;
+  font-size: medium;
+}

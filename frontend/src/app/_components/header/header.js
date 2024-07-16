@@ -11,7 +11,7 @@ export const HeaderMenu = () => {
     <>
       <header className={styles.header}>
         <Link href="/">
-          <Image src="/logos/logo1.png" alt="Logo" width={40} height={40} />
+          <Image src="/logos/logo1.png" alt="Logo" position="right" width={70} height={60} />
         </Link>
 
         <div className={styles.header_right}>
