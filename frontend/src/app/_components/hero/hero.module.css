@@ -1,10 +1,14 @@
-.heroContainer {
+.hero_container {
+  
+}
+
+.hero_default_section {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: rgb(240, 240, 240);
-  height: 90vh; 
+  height: 87vh;
   opacity: 0.5;
 }
 
@@ -15,4 +19,8 @@
 .heroSubtitle {
   padding: 0.75rem 7.5rem;
   font-size: medium;
+}
+
+.display_section {
+  padding: 0.75rem 7.5rem;
 }
