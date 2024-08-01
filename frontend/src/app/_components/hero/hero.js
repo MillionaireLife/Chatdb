@@ -9,9 +9,9 @@ export const HeroBody = () => {
   const [messages, setMessages] = useState([]);
 
   const handleTextSubmit = (text) => {
-    setMessages((prev) => [...prev, { sender: 'user', text }]); //... is a spread operator
+    setMessages((prev) => [...prev, { sender: 'user', message:text }]); //... is a spread operator
     setTimeout(() => {
-      setMessages((prevMessages) => [...prevMessages, { sender: 'ai', text: 'AI response: ' + text }]);
+      setMessages((prevMessages) => [...prevMessages, { sender: 'ai', message: 'AI response: ' + text }]);
     }, 1000);
   };
 
@@ -28,12 +28,12 @@ export const HeroBody = () => {
           </div>
         ) : (
           <div className={styles.display_setion}>
-            {messages.map((message, i) => (
+            {messages.map((input, index) => (
               <div
-                key={i}
-                className={`${styles.message} ${message.sender === 'user' ? styles.userMessage : styles.aiMessage}`}
+                key={index}
+                className={`${styles.message} ${input.sender === 'user' ? styles.userMessage : styles.aiMessage}`}
               >
-                <p>{message.text}</p>
+                <p>{input.message}</p>
               </div>
             ))}
           </div>
