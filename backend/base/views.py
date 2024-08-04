@@ -2,6 +2,8 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from .models import queryresponse
+from .serializers import queryresponseSerializer
 
 @api_view(["GET"])
 def helloworld(request):
@@ -31,5 +33,22 @@ def books_post(request):
     book = request.data
     print(book)
     return Response(book, status=status.HTTP_201_CREATED)
+
+@api_view(["POST","GET"])
+def messages(request):
+    if request.method == "GET":
+        messages = queryresponse.objects.all() #fetches all from db
+        serializer = queryresponseSerializer(messages, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        message = request.data
+        serializer = queryresponseSerializer(data = message)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
         
     
