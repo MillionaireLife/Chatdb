@@ -2,31 +2,16 @@ import React from 'react';
 import { Table } from '@mantine/core';
 
 export const TableComponent = () => {
-  // Example table data and headers (replace with real data)
-  const tableHeaders = ['Header 1', 'Header 2'];
-  const tableData = [
-    ['Row 1 Col 1', 'Row 1 Col 2'],
-    ['Row 2 Col 1', 'Row 2 Col 2'],
-  ];
+  const tableData = {
+    head: ['Element position', 'Atomic mass', 'Symbol', 'Element name'],
+    body: [
+      [6, 12.011, 'C', 'Carbon'],
+      [7, 14.007, 'N', 'Nitrogen'],
+      [39, 88.906, 'Y', 'Yttrium'],
+      [56, 137.33, 'Ba', 'Barium'],
+      [58, 140.12, 'Ce', 'Cerium'],
+    ],
+  };
 
-  return (
-    <Table>
-      <thead>
-        <tr>
-          {tableHeaders.map((header, index) => (
-            <th key={index}>{header}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {tableData.map((row, rowIndex) => (
-          <tr key={rowIndex}>
-            {row.map((cell, cellIndex) => (
-              <td key={cellIndex}>{cell}</td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </Table>
-  );
+  return <Table striped highlightOnHover withTableBorder withColumnBorders data={tableData} />;
 };

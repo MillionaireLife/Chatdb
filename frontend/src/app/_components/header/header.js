@@ -35,7 +35,6 @@ export const HeaderMenu = async () => {
           </Link>
         </div>
       </header>
-      
     </>
   );
 };

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './hero.module.css';
 import Image from 'next/image';
+
 import { TextInput } from '../elements/textinput';
 import { TextComponent } from '../elements/text';
 import { TableComponent } from '../elements/tableoutput';
@@ -27,6 +28,7 @@ export const HeroBody = () => {
     } else if (text.toLowerCase().includes('chart')) {
       responseType = 'chart';
     }
+
     setMessages((prev) => [...prev, { sender: 'user', message: text, type: 'text' }]); //... is a spread operator
     setTimeout(() => {
       setMessages((prevMessages) => [
@@ -36,22 +38,20 @@ export const HeroBody = () => {
     }, 1000);
   };
 
-  async function fetchdata() {
-    const data = await fetch('http://localhost:8000/api/books', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({"title": 'The Great', "author": 'F. Scott', "id": '4'  })
-    });
-    // const books = await data.json();
-    // console.log(books);
-  }
+  // async function fetchdata() {
+  //   const data = await fetch('http://localhost:8000/api/books', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ title: 'The Great', author: 'F. Scott', id: '4' }),
+  //   });
+  //   const books = await data.json();
+  //   console.log(books);
+  // }
   // useEffect(() => {
   //   fetchdata();
   // }, []);
-
-
 
   return (
     <>
@@ -65,7 +65,7 @@ export const HeroBody = () => {
             </h2>
           </div>
         ) : (
-          <div className={styles.display_setion}>
+          <div className={styles.display_section}>
             {messages.map((input, index) => (
               <div
                 key={index}
@@ -76,8 +76,6 @@ export const HeroBody = () => {
             ))}
           </div>
         )}
-        <button onClick = {fetchdata}>click</button>
-    
       </div>
 
       <TextInput onSubmit={handleTextSubmit} />
