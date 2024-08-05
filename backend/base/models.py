@@ -6,3 +6,4 @@ class queryresponse(models.Model):
     message = models.TextField()
     TYPE = [("text", "TEXT"),("table","TABLE"),("chart", "CHART")]
     type = models.CharField(max_length=100,choices=TYPE)
+    

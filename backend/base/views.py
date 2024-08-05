@@ -34,12 +34,33 @@ def books_post(request):
     print(book)
     return Response(book, status=status.HTTP_201_CREATED)
 
-@api_view(["POST","GET"])
+@api_view(["POST","GET","PUT","PATCH","DELETE"])
 def messages(request):
     if request.method == "GET":
         messages = queryresponse.objects.all() #fetches all from db
         serializer = queryresponseSerializer(messages, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == "PUT":
+        message = request.data
+        object = queryresponse.objects.get(id = message["id"])
+        serializer = queryresponseSerializer(object,data = message, partial = False)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == "PATCH":
+        message = request.data
+        object = queryresponse.objects.get(id = message["id"])
+        serializer = queryresponseSerializer(object,data = message, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+    elif request.method == "DELETE":
+        message = request.data
+        object = queryresponse.objects.get(id = message["id"])
+        object.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)      
     else:
         message = request.data
         serializer = queryresponseSerializer(data = message)
