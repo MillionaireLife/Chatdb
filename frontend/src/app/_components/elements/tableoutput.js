@@ -1,17 +1,6 @@
 import React from 'react';
 import { Table } from '@mantine/core';
 
-export const TableComponent = () => {
-  const tableData = {
-    head: ['Element position', 'Atomic mass', 'Symbol', 'Element name'],
-    body: [
-      [6, 12.011, 'C', 'Carbon'],
-      [7, 14.007, 'N', 'Nitrogen'],
-      [39, 88.906, 'Y', 'Yttrium'],
-      [56, 137.33, 'Ba', 'Barium'],
-      [58, 140.12, 'Ce', 'Cerium'],
-    ],
-  };
-
-  return <Table striped highlightOnHover withTableBorder withColumnBorders data={tableData} />;
+export const TableComponent = ({tabledata}) => {
+    return <Table striped highlightOnHover withTableBorder withColumnBorders data={tabledata} />;
 };

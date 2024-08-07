@@ -4,5 +4,6 @@ from . import views
 
 urlpatterns = [
     path("messages",views.messages, name="get/delete all messages"),
-    path("executequery",views.execute_query, name="execute query"),
+    path("executequery",views.executequery, name="execute query"),
+    
 ]
