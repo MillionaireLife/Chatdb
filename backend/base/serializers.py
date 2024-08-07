@@ -5,5 +5,6 @@ from .models import queryresponse
 class queryresponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = queryresponse
-        fields = ["sender", "message", "type","id" ]
-        # __all__ is used to include all fields exclude = ["id"] is used to exclude id field
+        fields = ['id', 'message', 'type', 'response', 'created_at']
+        read_only_fields = ['id', 'response', 'type', 'created_at']
+        

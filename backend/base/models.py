@@ -1,9 +1,10 @@
 from django.db import models
 
 class queryresponse(models.Model):
-    SENDER = [("user", "User"),("ai","AI")]
-    sender = models.CharField(max_length=100,choices=SENDER)
-    message = models.TextField()
-    TYPE = [("text", "TEXT"),("table","TABLE"),("chart", "CHART")]
-    type = models.CharField(max_length=100,choices=TYPE)
+    TYPE = [("text", "TEXT"), ("table", "TABLE"), ("chart", "CHART")]
     
+    message = models.TextField()
+    type = models.CharField(max_length=10, choices=TYPE)
+    response = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
