@@ -5,6 +5,7 @@ import { HeaderMenu } from './_components/header/header';
 
 import '@mantine/core/styles.css';
 import './globals.css';
+import '@mantine/charts/styles.css';
 
 const plus_jakarta_sans = Plus_Jakarta_Sans({ subsets: ['latin'], preload: true });
 

@@ -57,8 +57,12 @@ def executequery(request):
 def genrate_response(message,type):
     if type == "table":
         return {
-        "head":['Element position', 'Atomic mass', 'Symbol', 'Element name'],
+        "head":['Element position', 'Atomic mass', 'Symbol', 'Element "name"'],
         "body": [[6, 12.011, 'C', 'Carbon'],[7, 14.007, 'N', 'Nitrogen'],[39, 88.906, 'Y', 'Yttrium'],[56, 137.33, 'Ba', 'Barium'],[58, 140.12, 'Ce', 'Cerium']]}
+    elif type == "chart":
+        return {
+           "body" : [{ "name": 'USA', "value": 400, "color": 'indigo.6' },{ "name": 'India', "value": 300, "color": 'yellow.6' },{ "name": 'Japan', "value": 300, "color": 'teal.6' },{ "name": 'Other', "value": 200, "color": 'gray.6' }]
+        }
     else:
         return {"text": message}
     

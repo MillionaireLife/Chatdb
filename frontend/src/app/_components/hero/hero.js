@@ -5,8 +5,9 @@ import styles from './hero.module.css';
 import Image from 'next/image';
 
 import { TextInput } from '../elements/textinput';
-import { TextComponent } from '../elements/text';
+import { TextComponent } from '../elements/textoutput';
 import { TableComponent } from '../elements/tableoutput';
+import { Chartoutput } from '../elements/chartoutput';
 
 export const HeroBody = () => {
   const [messages, setMessages] = useState([]);
@@ -18,6 +19,13 @@ export const HeroBody = () => {
           <>
             <TextComponent userinput={message} />
             <TableComponent tabledata={message.response} />
+          </>
+        );
+      case 'chart':
+        return (
+          <>
+            <TextComponent userinput={message} />
+            <Chartoutput chart_data={message.response} />
           </>
         );
       default:
@@ -39,18 +47,18 @@ export const HeroBody = () => {
 
   useEffect(() => {
     async function fetchdata() {
-      const data = await fetch("http://localhost:8000/api/messages",{
-        method: "GET",
-        headers:{
-           'Content-Type': 'application/json',
+      const data = await fetch('http://localhost:8000/api/messages', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
         },
       });
       const response = await data.json();
       setMessages(response);
     }
-    fetchdata()
-  }, [])
-  
+    fetchdata();
+  }, []);
+
   // async function fetchdata() {
   //   const data = await fetch('http://localhost:8000/api/books', {
   //     method: 'POST',
