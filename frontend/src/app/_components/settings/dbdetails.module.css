@@ -1,0 +1,80 @@
+.dbDetails {
+  width: 45%;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.heading {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 22px;
+}
+
+.details p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.status {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.statusDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.active .statusDot {
+  background-color: green;
+}
+
+.inactive .statusDot {
+  background-color: red;
+}
+
+.active strong {
+  color: green;
+}
+
+.inactive strong {
+  color: red;
+}
+
+.disconnectButton {
+  margin-top: 30px;
+  padding: 10px 15px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.disconnectButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.disconnectButton:hover:not(:disabled) {
+  background-color: #e04343;
+}
+
+.noDetails {
+  color: #999;
+  font-style: italic;
+  font-size: 16px;
+}
