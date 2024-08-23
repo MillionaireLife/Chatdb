@@ -1,6 +1,8 @@
 'use client';
-import React, { useState } from 'react';
-export const stack = React.createContext();
+
+import React, { useState, createContext } from 'react';
+
+export const stack = createContext();
 
 export const ContextProvider = ({ children }) => {
   const [dblist, setDblist] = useState([]);

@@ -5,12 +5,43 @@ import styles from './hero.module.css';
 import Image from 'next/image';
 
 import { TextInput } from '../elements/textinput';
+import { Chartoutput } from '../elements/chartoutput';
 import { TextComponent } from '../elements/textoutput';
 import { TableComponent } from '../elements/tableoutput';
-import { Chartoutput } from '../elements/chartoutput';
 
 export const HeroBody = () => {
   const [messages, setMessages] = useState([]);
+
+  // Default fetch all the chat history
+  useEffect(() => {
+    async function fetchdata() {
+      const data = await fetch('http://localhost:8000/api/messages', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const response = await data.json();
+      setMessages(response);
+    }
+
+    fetchdata();
+  }, []);
+
+  // Execute the Natural Language Query entered by the user
+  const handleTextSubmit = async (text) => {
+    const data = await fetch('http://localhost:8000/api/executequery', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message: text }),
+    });
+
+    const response = await data.json();
+    setMessages([...messages, response]);
+  };
 
   const renderMessageContent = (message) => {
     switch (message.type) {
@@ -32,47 +63,6 @@ export const HeroBody = () => {
         return <TextComponent userinput={message} />;
     }
   };
-
-  const handleTextSubmit = async (text) => {
-    const data = await fetch('http://localhost:8000/api/executequery', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message: text }),
-    });
-    const response = await data.json();
-    setMessages([...messages, response]);
-  };
-
-  useEffect(() => {
-    async function fetchdata() {
-      const data = await fetch('http://localhost:8000/api/messages', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const response = await data.json();
-      setMessages(response);
-    }
-    fetchdata();
-  }, []);
-
-  // async function fetchdata() {
-  //   const data = await fetch('http://localhost:8000/api/books', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ title: 'The Great', author: 'F. Scott', id: '4' }),
-  //   });
-  //   const books = await data.json();
-  //   console.log(books);
-  // }
-  // useEffect(() => {
-  //   fetchdata();
-  // }, []);
 
   return (
     <>

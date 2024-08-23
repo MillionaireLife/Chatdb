@@ -1,17 +1,19 @@
 'use client';
+
 import React, { useState, useContext } from 'react';
 import { stack } from '../../context/context';
 
 const Form = () => {
   const { setDblist } = useContext(stack);
 
-  const [dbtype, setdbtype] = useState('');
   const [host, setHost] = useState('');
   const [port, setPort] = useState('');
+  const [dbtype, setdbtype] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const fetchData = async () => {
+  // Submit the database to connect details to the backend & fetch the list of databases
+  const fetchDBList = async () => {
     const response = await fetch('http://localhost:8000/api/settings', {
       method: 'POST',
       headers: {
@@ -25,6 +27,7 @@ const Form = () => {
         password: password,
       }),
     });
+
     const list = await response.json();
     setDblist(list);
   };
@@ -32,7 +35,13 @@ const Form = () => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetchData();
+    setdbtype('');
+    setHost('');
+    setPort('');
+    setUsername('');
+    setPassword('');
+
+    fetchDBList();
   };
 
   return (
@@ -40,12 +49,12 @@ const Form = () => {
       <div>
         <label htmlFor="dbtype">Database Type</label>
         <input
-          type="text"
+          required
           id="dbtype"
+          type="text"
           name="dbtype"
           value={dbtype}
           onChange={(e) => setdbtype(e.target.value)}
-          required
         />
       </div>
 
@@ -62,24 +71,24 @@ const Form = () => {
       <div>
         <label htmlFor="username">Username</label>
         <input
+          required
           type="text"
           id="username"
           name="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          required
         />
       </div>
 
       <div>
         <label htmlFor="password">Password</label>
         <input
-          type="password"
+          required
           id="password"
+          type="password"
           name="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
         />
       </div>
 
