@@ -6,16 +6,8 @@ import { IoSettingsSharp } from 'react-icons/io5';
 import { DBselect } from '../elements/dbselect';
 import { ActionIcon, Tooltip } from '@mantine/core';
 
-export const HeaderMenu = async () => {
-  // const response = await fetch('http://localhost:8000/api/books', {
-  //   method: 'GET',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  // });
-  // const books = await response.json();
-  // console.log(books);
 
+export const HeaderMenu = async () => {
   return (
     <>
       <header className={styles.header}>

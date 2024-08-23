@@ -3,9 +3,12 @@
 import React, { useState } from 'react';
 import { Select } from '@mantine/core';
 import { DiDatabase } from 'react-icons/di';
+import { stack } from '../../context/context';
+import { useContext } from 'react';
 
 export const DBselect = () => {
   const [db, setDB] = useState('');
+  const { dblist } = useContext(stack);
 
   return (
     <>
@@ -21,7 +24,7 @@ export const DBselect = () => {
         placeholder="Select a Database"
         comboboxProps={{ shadow: 'md' }}
         nothingFoundMessage="Nothing found..."
-        data={['MySQL', 'MongoDB', 'PostgreSQL', 'SQLite']}
+        data={dblist}
       />
     </>
   );

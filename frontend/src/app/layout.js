@@ -2,6 +2,7 @@ import { MantineProvider } from '@mantine/core';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 
 import { HeaderMenu } from './_components/header/header';
+import { ContextProvider } from './context/context';
 
 import '@mantine/core/styles.css';
 import './globals.css';
@@ -18,10 +19,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={plus_jakarta_sans.className} suppressHydrationWarning={true}>
-        <MantineProvider>
-          <HeaderMenu />
-          {children}
-        </MantineProvider>
+        <ContextProvider>
+          <MantineProvider>
+            <HeaderMenu />
+            {children}
+          </MantineProvider>
+        </ContextProvider>
       </body>
     </html>
   );

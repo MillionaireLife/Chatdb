@@ -4,6 +4,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import queryresponse
 from .serializers import queryresponseSerializer
+from django.db import connections
+import datetime
+from decimal import Decimal
+import MySQLdb
 
 
 
@@ -43,6 +47,28 @@ def messages(request):
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(["POST"])
+def fetchsettings(request):
+    dbtype = request.data.get("dbtype")
+    host = request.data.get("host")
+    port = int(request.data.get("port"))
+    user = request.data.get("user")
+    password = request.data.get("password")
+    connection = None
+    try:
+        if dbtype == "mysql":
+            connection = MySQLdb.connect(host=host, port=port, user=user, password=password)
+            cursor = connection.cursor()
+            cursor.execute("SHOW DATABASES")
+            dblist = [db[0] for db in cursor.fetchall()]
+            print(dblist) 
+            return Response(dblist, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"error": "Invalid DB type"}, status=400)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+    
 @api_view(["POST"])
 def executequery(request):
     message = request.data.get("message")
@@ -50,7 +76,6 @@ def executequery(request):
     response = generate_response(message,type)
     # object_data = queryresponse(message=message,type=type,response=response)
     object_data = {"message":message,"type":type,"response":response}
-    print(object_data)
     serializer = queryresponseSerializer(data = object_data)
     if serializer.is_valid():
         serializer.save()
@@ -68,8 +93,50 @@ def generate_response(message,type):
         }
     else:
         return {"text": message}
-    
 
+@api_view(["POST"])    
+def fetch_from_db(query):
+    response = query.data.get("query") 
+    type = "table" if "table" in response.lower() else "chart" if "chart" in response.lower() else "text"
+    try:
+        with connections['mysql'].cursor() as cursor:
+            cursor.execute(response)
+            columns = [col[0] for col in cursor.description]
+            results = cursor.fetchall()
+            data = [dict(zip(columns, row)) for row in results] 
+            data_final =  conversion(data)
+            print(data_final)
+            object={
+                "message":response,
+                "type":"table",
+                "response":data_final
+            }
+        serializer = queryresponseSerializer(data = object)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED) 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
+      
+def conversion(data, type="table"):
+    if type == "table":
+        body = []
+        for i in range(len(data)):
+            if i == 0:
+                head = list(data[i].keys())  
+            row = list(data[i].values())   
+            
+            # Generalized conversion for any datetime or Decimal objects
+            for j in range(len(row)):
+                if isinstance(row[j], datetime.date):
+                    row[j] = row[j].strftime('%Y-%m-%d')
+                elif isinstance(row[j], datetime.datetime):
+                    row[j] = row[j].strftime('%Y-%m-%d %H:%M:%S')
+                elif isinstance(row[j], Decimal):
+                    row[j] = float(row[j])  # Convert Decimal to float 
+            body.append(row)
+        return {"head": head, "body": body}
     
     
         
