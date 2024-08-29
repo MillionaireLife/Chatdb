@@ -7,4 +7,5 @@ urlpatterns = [
     path("executequery", views.executequery, name="execute query"),
     path("fetch_from_db", views.fetch_from_db, name="fetch_from_db"),
     path("settings", views.fetchsettings, name="fetchsettings"),
+    path("disconnectdb", views.disconnectdb, name="disconnectdb"),
 ]

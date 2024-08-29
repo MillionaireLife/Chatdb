@@ -6,6 +6,13 @@ export const stack = createContext();
 
 export const ContextProvider = ({ children }) => {
   const [dblist, setDblist] = useState([]);
+   const [dbDetails, setDbDetails] = useState({
+     dbtype: '',
+     host: '',
+     port: '',
+     user: '',
+     status: 'inactive', // Change this value to 'active' or 'inactive'
+   });
 
   return (
     <>
@@ -13,6 +20,8 @@ export const ContextProvider = ({ children }) => {
         value={{
           setDblist,
           dblist,
+          setDbDetails,
+          dbDetails,
         }}
       >
         {children}

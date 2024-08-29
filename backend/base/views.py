@@ -145,7 +145,16 @@ def fetch_from_db(query):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({"error": str(e)}, status=400)
-
+    
+@api_view(["GET"])
+def disconnectdb(request):
+    try:
+        with connections["mysql"].cursor() as cursor:
+            cursor.execute("DISCONNECT")
+            return Response({"message": "Disconnected"}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
+        
 
 def conversion(data, type="table"):
     if type == "table":

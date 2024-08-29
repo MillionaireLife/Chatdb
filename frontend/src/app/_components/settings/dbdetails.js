@@ -1,18 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { stack } from '../../context/context';
 import styles from './dbdetails.module.css';
 
 export const DbDetails = () => {
-  const dbDetails = {
-    dbtype: 'MySQL',
-    host: 'localhost',
-    port: '3306',
-    user: 'root',
-    status: 'active', // Change this value to 'active' or 'inactive'
-  };
-
-  const handleDisconnect = () => {
+  const { dbDetails,setDbDetails } = useContext(stack);
+  // to fetch the existing db details on page load from local storage
+  useEffect(() => {
+    const details = window.localStorage.getItem('dbDetails') 
+    if (details) {
+      setDbDetails(JSON.parse(details))
+    }    
+  }, [])
+  
+  const handleDisconnect = async () => {
     if (dbDetails.status === 'active') {
-      console.log('Disconnected from the database');
+      await fetch('/api/disconnect', {
+        method: 'GET',
+      }).then((res) => {
+        setDbDetails((prevDbDetails) => ({
+          status: 'inactive',
+          dbtype: '',
+          host: '',
+          port: '',
+          user: '',
+        }));
+        window.localStorage.removeItem('dbDetails');
+      });
     }
   };
 

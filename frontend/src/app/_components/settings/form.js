@@ -6,8 +6,7 @@ import { DbDetails } from './dbdetails';
 import styles from './form.module.css';
 
 export const Form = () => {
-  const { setDblist } = useContext(stack);
-
+  const { setDblist, setDbDetails } = useContext(stack);
   const [host, setHost] = useState('');
   const [port, setPort] = useState('');
   const [dbtype, setdbtype] = useState('');
@@ -29,9 +28,24 @@ export const Form = () => {
         password: password,
       }),
     });
+    if (response.ok) {
+      const dbDetails = {
+        dbtype: dbtype,
+        host: host,
+        port: port,
+        user: username,
+        status: 'active',
+      };
+      console.log(response);
+      window.localStorage.setItem('dbDetails', JSON.stringify(dbDetails));
+      setDbDetails(dbDetails);
+      const list = await response.json();
+      setDblist(list);
+    }
+   else{
+    alert("Invalid Credentials");
+   }
 
-    const list = await response.json();
-    setDblist(list);
   };
 
   // Handle form submission
@@ -122,3 +136,6 @@ export const Form = () => {
     </div>
   );
 };
+
+
+
