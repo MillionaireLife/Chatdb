@@ -15,15 +15,19 @@ export const HeroBody = () => {
   // Default fetch all the chat history
   useEffect(() => {
     async function fetchdata() {
-      const data = await fetch('http://localhost:8000/api/messages', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      try {
+        const response = await fetch('http://localhost:8000/api/messages', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-      const response = await data.json();
-      setMessages(response);
+        const data = await response.json();
+        setMessages(data);
+      } catch (err) {
+        console.error('Error fetching messages:', err);
+      }
     }
 
     fetchdata();
@@ -31,16 +35,20 @@ export const HeroBody = () => {
 
   // Execute the Natural Language Query entered by the user
   const handleTextSubmit = async (text) => {
-    const data = await fetch('http://localhost:8000/api/executequery', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message: text }),
-    });
+    try {
+      const response = await fetch('http://localhost:8000/api/executequery', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: text }),
+      });
 
-    const response = await data.json();
-    setMessages([...messages, response]);
+      const data = await response.json();
+      setMessages([...messages, data]);
+    } catch (err) {
+      console.error('Error executing query:', err);
+    }
   };
 
   const renderMessageContent = (message) => {

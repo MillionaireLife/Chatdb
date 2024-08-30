@@ -10,23 +10,30 @@ export const DBselect = () => {
   const { dblist } = useContext(stack);
 
   async function switchdatabase(database) {
-    const response = await fetch('http://localhost:8000/api/switchdatabase', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        dbname: database,
-      }),
-    });
+    try {
+      const response = await fetch('http://localhost:8000/api/switchdatabase', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          dbname: database,
+        }),
+      });
+    } catch (err) {
+      console.error('Error switching database:', err);
+    }
   }
 
   function handlechange(database) {
     setDB(database);
     switchdatabase(database);
+
     let Details = JSON.parse(window.localStorage.getItem('dbDetails'));
-    Details.dbname = database;
-    window.localStorage.setItem('dbDetails', JSON.stringify(Details));
+    if (Details) {
+      Details.dbname = database;
+      window.localStorage.setItem('dbDetails', JSON.stringify(Details));
+    }
   }
 
   return (

@@ -8,8 +8,9 @@ import datetime
 from decimal import Decimal
 import MySQLdb
 
-#to fetch and delete all messages from the database(SQLite)
-@api_view(["POST", "GET", "PUT", "PATCH", "DELETE"])
+
+# to fetch and delete all messages from the database(SQLite)
+@api_view(["GET", "DELETE"])
 def messages(request):
     if request.method == "GET":
         messages = queryresponse.objects.all()  # fetches all from db
@@ -29,7 +30,7 @@ def fetchsettings(request):
     user = request.data.get("user")
     password = request.data.get("password")
     request.session["dbtype"] = dbtype
-    print(request.session.get("dbtype"))
+
     try:
         # Establish a new connection for each request
         if dbtype == "mysql":
@@ -44,12 +45,21 @@ def fetchsettings(request):
             connection.close()
             return Response(dblist, status=status.HTTP_201_CREATED)
         else:
-            return Response({"error": "Invalid DB type"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Invalid DB type"}, status=status.HTTP_400_BAD_REQUEST
+            )
     except MySQLdb.OperationalError as e:
-        return Response({"error": f"Database connection failed: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(
+            {"error": f"Database connection failed: {str(e)}"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
     except Exception as e:
-        return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+        return Response(
+            {"error": f"An error occurred: {str(e)}"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+
 # Fetch the response from the database
 @api_view(["POST"])
 def fetch_from_db(request):
@@ -78,7 +88,8 @@ def fetch_from_db(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({"error": str(e)}, status=400)
-    
+
+
 def conversion(data, type="table"):
     if type == "table":
         body = []
@@ -95,16 +106,19 @@ def conversion(data, type="table"):
                 elif isinstance(row[j], Decimal):
                     row[j] = float(row[j])  # Convert Decimal to float
             body.append(row)
-        return {"head": head, "body": body}    
-    
+        return {"head": head, "body": body}
+
+
 @api_view(["GET"])
 def disconnectdb(request):
+    dbtype = request.session.get("dbtype")
     try:
         with connections["mysql"].cursor() as cursor:
             cursor.execute("DISCONNECT")
             return Response({"message": "Disconnected"}, status=status.HTTP_200_OK)
     except Exception as e:
-        return Response({"error": str(e)}, status=400)  
+        return Response({"error": str(e)}, status=400)
+
 
 @api_view(["POST"])
 def switchdatabase(request):
@@ -114,6 +128,8 @@ def switchdatabase(request):
     try:
         with connections[dbtype].cursor() as cursor:
             cursor.execute(f"USE {dbname}")
-            return Response({"message": f"Switched to {dbname}"}, status=status.HTTP_200_OK)
+            return Response(
+                {"message": f"Switched to {dbname}"}, status=status.HTTP_200_OK
+            )
     except Exception as e:
         return Response({"error": str(e)}, status=400)

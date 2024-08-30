@@ -7,46 +7,53 @@ import styles from './form.module.css';
 
 export const Form = () => {
   const { setDblist, setDbDetails } = useContext(stack);
+
   const [host, setHost] = useState('');
   const [port, setPort] = useState('');
   const [dbtype, setdbtype] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  // Submit the database connection details to the backend & fetch the list of databases
+  // Function to handle database fetch and store data in localStorage
   const fetchDBList = async () => {
-    const response = await fetch('http://localhost:8000/api/settings', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        dbtype: dbtype,
-        host: host,
-        port: port,
-        user: username,
-        password: password,
-      }),
-    });
-    if (response.ok) {
-      const dbDetails = {
-        dbtype: dbtype,
-        host: host,
-        port: port,
-        user: username,
-        password: password,
-        status: 'active',
-      };
-      console.log(response);
-      window.localStorage.setItem('dbDetails', JSON.stringify(dbDetails));
-      setDbDetails(dbDetails);
-      const list = await response.json();
-      setDblist(list);
-    }
-   else{
-    alert("Invalid Credentials");
-   }
+    try {
+      const response = await fetch('http://localhost:8000/api/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          dbtype: dbtype,
+          host: host,
+          port: port,
+          user: username,
+          password: password,
+        }),
+      });
 
+      if (response.ok) {
+        const dbDetails = {
+          dbtype: dbtype,
+          host: host,
+          port: port,
+          user: username,
+          password: password,
+          status: 'active',
+        };
+
+        // Store dbDetails in localStorage
+        window.localStorage.setItem('dbDetails', JSON.stringify(dbDetails));
+        setDbDetails(dbDetails);
+
+        // Fetch and set the list of databases
+        const list = await response.json();
+        setDblist(list);
+      } else {
+        alert('Invalid Credentials!');
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // Handle form submission
@@ -137,6 +144,3 @@ export const Form = () => {
     </div>
   );
 };
-
-
-

@@ -1,49 +1,62 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { stack } from '../../context/context';
 import styles from './dbdetails.module.css';
 
 export const DbDetails = () => {
   const { dbDetails, setDbDetails, setDblist } = useContext(stack);
-  // to fetch the existing db details on page load from local storage
+
+  // Fetch existing db details from localStorage on page load
   useEffect(() => {
     const details = window.localStorage.getItem('dbDetails');
     if (details) {
-      checkconnection(JSON.parse(details));
       setDbDetails(JSON.parse(details));
+      checkconnection(JSON.parse(details));
     }
   }, []);
 
-  async function checkconnection(details) {
-    const list = await fetch('http://localhost:8000/api/settings', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        dbtype: details.dbtype,
-        host: details.host,
-        port: details.port,
-        user: details.user,
-        password: details.password,
-      }),
-    });
-    setDblist(await list.json())
-  }
+  // Check the connection with the stored database details
+  const checkconnection = async (details) => {
+    try {
+      const response = await fetch('http://localhost:8000/api/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          dbtype: details.dbtype,
+          host: details.host,
+          port: details.port,
+          user: details.user,
+          password: details.password,
+        }),
+      });
+
+      const list = await response.json();
+      setDblist(list); // Update the list of databases for dropdown in header
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleDisconnect = async () => {
     if (dbDetails.status === 'active') {
-      await fetch('http://localhost:8000/api/disconnect', {
-        method: 'GET',
-      }).then((res) => {
-        setDbDetails((prevDbDetails) => ({
-          status: 'inactive',
+      try {
+        const response = await fetch('http://localhost:8000/api/disconnect', {
+          method: 'GET',
+        });
+
+        // Reset connection details and remove them from localStorage
+        setDbDetails({
           dbtype: '',
           host: '',
           port: '',
           user: '',
-        }));
+          status: 'inactive',
+        });
         window.localStorage.removeItem('dbDetails');
-      });
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
 
