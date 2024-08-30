@@ -34,6 +34,7 @@ export const Form = () => {
         host: host,
         port: port,
         user: username,
+        password: password,
         status: 'active',
       };
       console.log(response);

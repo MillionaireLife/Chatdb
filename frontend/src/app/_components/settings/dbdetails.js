@@ -3,18 +3,36 @@ import { stack } from '../../context/context';
 import styles from './dbdetails.module.css';
 
 export const DbDetails = () => {
-  const { dbDetails,setDbDetails } = useContext(stack);
+  const { dbDetails, setDbDetails, setDblist } = useContext(stack);
   // to fetch the existing db details on page load from local storage
   useEffect(() => {
-    const details = window.localStorage.getItem('dbDetails') 
+    const details = window.localStorage.getItem('dbDetails');
     if (details) {
-      setDbDetails(JSON.parse(details))
-    }    
-  }, [])
-  
+      checkconnection(JSON.parse(details));
+      setDbDetails(JSON.parse(details));
+    }
+  }, []);
+
+  async function checkconnection(details) {
+    const list = await fetch('http://localhost:8000/api/settings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dbtype: details.dbtype,
+        host: details.host,
+        port: details.port,
+        user: details.user,
+        password: details.password,
+      }),
+    });
+    setDblist(await list.json())
+  }
+
   const handleDisconnect = async () => {
     if (dbDetails.status === 'active') {
-      await fetch('/api/disconnect', {
+      await fetch('http://localhost:8000/api/disconnect', {
         method: 'GET',
       }).then((res) => {
         setDbDetails((prevDbDetails) => ({

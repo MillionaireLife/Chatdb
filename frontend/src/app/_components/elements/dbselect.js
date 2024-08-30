@@ -9,6 +9,26 @@ export const DBselect = () => {
   const [db, setDB] = useState('');
   const { dblist } = useContext(stack);
 
+  async function switchdatabase(database) {
+    const response = await fetch('http://localhost:8000/api/switchdatabase', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dbname: database,
+      }),
+    });
+  }
+
+  function handlechange(database) {
+    setDB(database);
+    switchdatabase(database);
+    let Details = JSON.parse(window.localStorage.getItem('dbDetails'));
+    Details.dbname = database;
+    window.localStorage.setItem('dbDetails', JSON.stringify(Details));
+  }
+
   return (
     <Select
       pointer
@@ -16,7 +36,7 @@ export const DBselect = () => {
       searchable
       value={db}
       allowDeselect
-      onChange={setDB}
+      onChange={handlechange}
       checkIconPosition="right"
       leftSection={<DiDatabase />}
       placeholder="Select a Database"
