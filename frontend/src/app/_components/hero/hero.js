@@ -16,7 +16,7 @@ export const HeroBody = () => {
   useEffect(() => {
     async function fetchdata() {
       try {
-        const response = await fetch('http://localhost:8000/api/messages', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/messages`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -36,12 +36,12 @@ export const HeroBody = () => {
   // Execute the Natural Language Query entered by the user
   const handleTextSubmit = async (text) => {
     try {
-      const response = await fetch('http://localhost:8000/api/fetchfromdb', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/fetchfromdb`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: text}),
+        body: JSON.stringify({ query: text }),
       });
 
       const data = await response.json();

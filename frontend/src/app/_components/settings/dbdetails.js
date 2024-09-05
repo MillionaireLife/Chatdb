@@ -17,7 +17,7 @@ export const DbDetails = () => {
   // Check the connection with the stored database details
   const checkconnection = async (details) => {
     try {
-      const response = await fetch('http://localhost:8000/api/settings', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/settings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export const DbDetails = () => {
   const handleDisconnect = async () => {
     if (dbDetails.status === 'active') {
       try {
-        const response = await fetch(`http://localhost:8000/api/disconnectdb`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/disconnectdb`, {
           method: 'GET',
         });
         // Reset connection details and remove them from localStorage

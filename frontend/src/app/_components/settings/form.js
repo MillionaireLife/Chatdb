@@ -17,7 +17,7 @@ export const Form = () => {
   // Function to handle database fetch and store data in localStorage
   const fetchDBList = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/settings', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/settings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

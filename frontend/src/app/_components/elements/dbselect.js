@@ -11,11 +11,10 @@ export const DBselect = () => {
 
   async function switchdatabase(database) {
     try {
-      const response = await fetch('http://localhost:8000/api/switchdatabase', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/switchdatabase`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-
         },
         body: JSON.stringify({
           dbname: database,
