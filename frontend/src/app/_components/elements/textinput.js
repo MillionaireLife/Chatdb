@@ -7,6 +7,14 @@ import { BsArrowUpCircleFill } from 'react-icons/bs';
 export const TextInput = ({ onSubmit }) => {
   const [query, setQuery] = useState('');
 
+  const checkdbconnection = () => {
+    const details = window.localStorage.getItem('dbDetails');
+    if (!details) {
+      alert('Please connect to a database first!');
+      return false;
+    }
+  }
+
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && query !== '') {
       onSubmit(query);
@@ -15,7 +23,8 @@ export const TextInput = ({ onSubmit }) => {
   };
 
   const handleClick = () => {
-    if (query !== '') {
+    let check = checkdbconnection();
+    if (query !== '' && check) {
       onSubmit(query);
       setQuery('');
     }

@@ -41,19 +41,21 @@ export const DbDetails = () => {
   const handleDisconnect = async () => {
     if (dbDetails.status === 'active') {
       try {
-        const response = await fetch('http://localhost:8000/api/disconnect', {
+        const response = await fetch(`http://localhost:8000/api/disconnectdb`, {
           method: 'GET',
         });
-
         // Reset connection details and remove them from localStorage
-        setDbDetails({
-          dbtype: '',
-          host: '',
-          port: '',
-          user: '',
-          status: 'inactive',
-        });
-        window.localStorage.removeItem('dbDetails');
+        if (response.ok) {
+          setDblist([]);
+          setDbDetails({
+            dbtype: '',
+            host: '',
+            port: '',
+            user: '',
+            status: 'inactive',
+          });
+          window.localStorage.removeItem('dbDetails');
+        }
       } catch (err) {
         console.error(err);
       }

@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     path("messages", views.messages, name="get/delete all messages"),
-    path("fetch_from_db", views.fetch_from_db, name="fetch_from_db"),
+    path("fetchfromdb", views.fetchfromdb, name="fetchfromdb"),
     path("settings", views.fetchsettings, name="fetchsettings"),
     path("disconnectdb", views.disconnectdb, name="disconnectdb"),
     path("switchdatabase", views.switchdatabase, name="switchdatabase"),

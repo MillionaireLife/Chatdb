@@ -36,12 +36,12 @@ export const HeroBody = () => {
   // Execute the Natural Language Query entered by the user
   const handleTextSubmit = async (text) => {
     try {
-      const response = await fetch('http://localhost:8000/api/executequery', {
+      const response = await fetch('http://localhost:8000/api/fetchfromdb', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: text }),
+        body: JSON.stringify({ query: text}),
       });
 
       const data = await response.json();
