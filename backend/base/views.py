@@ -3,13 +3,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import queryresponse
 from .serializers import queryresponseSerializer
-from django.db import connections, OperationalError
+from django.core.exceptions import ValidationError
 import datetime
 from decimal import Decimal
 import MySQLdb
 
 # Global dictionary to maintain active connections
 active_connections = {}
+
 
 # to fetch and delete all messages from the database(SQLite)
 @api_view(["GET", "DELETE"])
@@ -23,6 +24,8 @@ def messages(request):
         return Response(status=status.HTTP_204_NO_CONTENT)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+# API to Establish a connection with the database and fetch the list of internal-databases
 @api_view(["POST"])
 def fetchsettings(request):
     dbtype = request.data.get("dbtype")
@@ -30,7 +33,16 @@ def fetchsettings(request):
     port = int(request.data.get("port"))
     user = request.data.get("user")
     password = request.data.get("password")
-    
+
+    # Input validation
+    if dbtype not in ["mysql", "postgres", "mongodb"]:
+        return Response({"error": "Invalid dbtype"}, status=status.HTTP_400_BAD_REQUEST)
+
+    if not all([host, port, user, password]):
+        return Response(
+            {"error": "Missing required parameters"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
     connection = None
     cursor = None
 
@@ -47,16 +59,21 @@ def fetchsettings(request):
             # Store the connection in the global dictionary using a unique identifier
             user_id = request.user.id  # Replace with actual user/session identifier
             active_connections[user_id] = connection
-            
+
             return Response(dblist, status=status.HTTP_201_CREATED)
         else:
             return Response(
-                {"error": "Invalid DB type"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "Unsupported DB type"}, status=status.HTTP_400_BAD_REQUEST
             )
     except MySQLdb.OperationalError as e:
         return Response(
             {"error": f"Database connection failed: {str(e)}"},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+    except ValueError as ve:
+        return Response(
+            {"error": f"Invalid data type provided: {str(ve)}"},
+            status=status.HTTP_400_BAD_REQUEST,
         )
     except Exception as e:
         return Response(
@@ -65,8 +82,7 @@ def fetchsettings(request):
         )
 
 
-
-# Fetch the response from the database
+# Fetch the response from the database as per the user query
 @api_view(["POST"])
 def fetchfromdb(request):
     response = request.data.get("query")
@@ -76,25 +92,40 @@ def fetchfromdb(request):
         if "table" in response.lower()
         else "chart" if "chart" in response.lower() else "text"
     )
+
+    if not response:
+        return Response(
+            {"error": "No query provided"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
     try:
         if user_id in active_connections:
             connection = active_connections.get(user_id)
             if connection:
-            # Switch database using the existing connection
+                # Switch database using the existing connection
                 with connection.cursor() as cursor:
                     cursor.execute(response)
                     columns = [col[0] for col in cursor.description]
                     results = cursor.fetchall()
                     data = [dict(zip(columns, row)) for row in results]
                     data_final = conversion(data)
-                    object = {"message": response, "type": "table", "response": data_final}
+                    object = {
+                        "message": response,
+                        "type": "table",
+                        "response": data_final,
+                    }
                 serializer = queryresponseSerializer(data=object)
                 if serializer.is_valid():
                     serializer.save()
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             else:
-                return Response({"error": "No active connection found for the user."}, status=status.HTTP_404_NOT_FOUND)
+                return Response(
+                    {"error": "No active connection found for the user."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+    except MySQLdb.ProgrammingError as e:
+        return Response({"error": f"SQL Error: {str(e)}"}, status=400)
     except Exception as e:
         return Response({"error": str(e)}, status=400)
 
@@ -129,9 +160,20 @@ def disconnectdb(request):
                 connection.close()  # Close the database connection
                 return Response({"message": "Disconnected"}, status=status.HTTP_200_OK)
             else:
-                return Response({"error": "No active connection found."}, status=status.HTTP_404_NOT_FOUND)
+                return Response(
+                    {"error": "No active connection found."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
         else:
-            return Response({"error": "No active connection found for the user."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "No active connection found for the user."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+    except MySQLdb.OperationalError as e:
+        return Response(
+            {"error": f"Disconnection error: {str(e)}"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -140,22 +182,31 @@ def disconnectdb(request):
 def switchdatabase(request):
     dbname = request.data.get("dbname")
     user_id = request.user.id  # Replace with the actual user/session identifier
+
     try:
         # Retrieve the active connection for the user
         connection = active_connections.get(user_id)
         if connection:
             # Switch database using the existing connection
             with connection.cursor() as cursor:
-                cursor.execute(f"USE `{dbname}`")
+                cursor.execute(f"USE %s", (dbname,))
             return Response(
                 {"message": f"Switched to {dbname}"}, status=status.HTTP_200_OK
             )
         else:
-            return Response({"error": "No active connection found for the user."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "No active connection found for the user."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+    except ValidationError as ve:
+        return Response({"error": str(ve)}, status=status.HTTP_400_BAD_REQUEST)
     except MySQLdb.OperationalError as e:
         return Response(
             {"error": f"Failed to switch database: {str(e)}"},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
     except Exception as e:
-        return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(
+            {"error": f"An error occurred: {str(e)}"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )

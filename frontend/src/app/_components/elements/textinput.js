@@ -13,7 +13,7 @@ export const TextInput = ({ onSubmit }) => {
       alert('Please connect to a database first!');
       return false;
     }
-  }
+  };
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && query !== '') {
