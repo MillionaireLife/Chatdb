@@ -2,18 +2,12 @@
 
 import React, { useState } from 'react';
 import { ActionIcon, Input } from '@mantine/core';
+
+import { IoMicCircleSharp } from 'react-icons/io5';
 import { BsArrowUpCircleFill } from 'react-icons/bs';
 
 export const TextInput = ({ onSubmit }) => {
   const [query, setQuery] = useState('');
-
-  const checkdbconnection = () => {
-    const details = window.localStorage.getItem('dbDetails');
-    if (!details) {
-      alert('Please connect to a database first!');
-      return false;
-    }
-  };
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && query !== '') {
@@ -23,8 +17,7 @@ export const TextInput = ({ onSubmit }) => {
   };
 
   const handleClick = () => {
-    let check = checkdbconnection();
-    if (query !== '' && check) {
+    if (query !== '') {
       onSubmit(query);
       setQuery('');
     }
@@ -46,9 +39,14 @@ export const TextInput = ({ onSubmit }) => {
       onChange={(e) => setQuery(e.currentTarget.value)}
       onKeyDown={handleKeyPress}
       rightSection={
-        <ActionIcon size="md" radius="xl" color="dark" variant="default" aria-label="Send" onClick={handleClick}>
-          <BsArrowUpCircleFill style={{ width: '30px', height: '30px' }} />
-        </ActionIcon>
+        <>
+          <ActionIcon size="md" radius="xl" color="dark" variant="transparent" aria-label="Send" onClick={handleClick}>
+            <BsArrowUpCircleFill style={{ width: '30px', height: '30px' }} />
+          </ActionIcon>
+          <ActionIcon size="lg" radius="xl" color="dark" variant="transparent" aria-label="Mic">
+            <IoMicCircleSharp style={{ width: '33px', height: '33px' }} />
+          </ActionIcon>
+        </>
       }
     />
   );

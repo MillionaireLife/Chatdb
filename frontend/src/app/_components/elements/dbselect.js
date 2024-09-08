@@ -5,6 +5,9 @@ import { Select } from '@mantine/core';
 import { DiDatabase } from 'react-icons/di';
 import { stack } from '../../context/context';
 
+import { notifications } from '@mantine/notifications';
+import { NOTIFICATIONS } from '../notifications/notifications';
+
 export const DBselect = () => {
   const [db, setDB] = useState('');
   const { dblist } = useContext(stack);
@@ -20,7 +23,13 @@ export const DBselect = () => {
           dbname: database,
         }),
       });
+
+      if (response.ok) {
+        notifications.show(NOTIFICATIONS.success_switchdb);
+        return;
+      }
     } catch (err) {
+      notifications.show(NOTIFICATIONS.error_switchdb);
       console.error('Error switching database:', err);
     }
   }

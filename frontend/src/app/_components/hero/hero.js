@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react';
 import styles from './hero.module.css';
 import Image from 'next/image';
 
+import { notifications } from '@mantine/notifications';
+import { NOTIFICATIONS } from '@/app/_components/notifications/notifications';
+
 import { TextInput } from '../elements/textinput';
 import { Chartoutput } from '../elements/chartoutput';
 import { TextComponent } from '../elements/textoutput';
@@ -44,8 +47,14 @@ export const HeroBody = () => {
         body: JSON.stringify({ query: text }),
       });
 
-      const data = await response.json();
-      setMessages([...messages, data]);
+      if (!response.ok) {
+        notifications.show(NOTIFICATIONS.error_checkconnection);
+        return;
+      } else {
+        notifications.show(NOTIFICATIONS.success_fetchmessages);
+        const data = await response.json();
+        setMessages([...messages, data]);
+      }
     } catch (err) {
       console.error('Error executing query:', err);
     }

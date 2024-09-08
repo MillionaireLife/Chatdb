@@ -5,6 +5,9 @@ import { stack } from '../../context/context';
 import { DbDetails } from './dbdetails';
 import styles from './form.module.css';
 
+import { notifications } from '@mantine/notifications';
+import { NOTIFICATIONS } from '../notifications/notifications';
+
 export const Form = () => {
   const { setDblist, setDbDetails } = useContext(stack);
 
@@ -32,6 +35,7 @@ export const Form = () => {
       });
 
       if (response.ok) {
+        notifications.show(NOTIFICATIONS.success_fetchsettings);
         const dbDetails = {
           dbtype: dbtype,
           host: host,
@@ -49,7 +53,7 @@ export const Form = () => {
         const list = await response.json();
         setDblist(list);
       } else {
-        alert('Invalid Credentials!');
+        notifications.show(NOTIFICATIONS.error_credentials);
       }
     } catch (err) {
       console.error(err);

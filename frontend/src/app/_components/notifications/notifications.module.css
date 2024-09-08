@@ -1,0 +1,16 @@
+.title {
+  font-weight: bold;
+}
+
+.description,
+.title {
+  color: #ffffff;
+}
+
+.closeButton {
+  color: #ffffff;
+}
+
+.closeButton:hover {
+  background-color: transparent;
+}

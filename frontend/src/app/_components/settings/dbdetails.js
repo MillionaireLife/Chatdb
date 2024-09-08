@@ -2,6 +2,9 @@ import React, { useEffect, useContext } from 'react';
 import { stack } from '../../context/context';
 import styles from './dbdetails.module.css';
 
+import { notifications } from '@mantine/notifications';
+import { NOTIFICATIONS } from '../notifications/notifications';
+
 export const DbDetails = () => {
   const { dbDetails, setDbDetails, setDblist } = useContext(stack);
 
@@ -46,6 +49,7 @@ export const DbDetails = () => {
         });
         // Reset connection details and remove them from localStorage
         if (response.ok) {
+          notifications.show(NOTIFICATIONS.success_disconnectdb);
           setDblist([]);
           setDbDetails({
             dbtype: '',
@@ -55,6 +59,9 @@ export const DbDetails = () => {
             status: 'inactive',
           });
           window.localStorage.removeItem('dbDetails');
+        } else {
+          notifications.show(NOTIFICATIONS.error_disconnectdb);
+          console.error('Error disconnecting from database');
         }
       } catch (err) {
         console.error(err);
