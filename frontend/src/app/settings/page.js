@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form } from '../_components/settings/form';
+import { Form } from '@/components/settings/form';
 
 const SettingsPage = () => {
   return (

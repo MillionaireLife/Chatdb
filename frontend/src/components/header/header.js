@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './header.module.css';
 
-import { DBselect } from '../elements/dbselect';
+import { DBselect } from '@/components/elements/dbselect';
 import { IoSettingsSharp } from 'react-icons/io5';
 import { ActionIcon, Tooltip } from '@mantine/core';
 

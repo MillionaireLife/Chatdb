@@ -5,6 +5,8 @@ import { ActionIcon, Input } from '@mantine/core';
 
 import { IoMicCircleSharp } from 'react-icons/io5';
 import { BsArrowUpCircleFill } from 'react-icons/bs';
+import { notifications } from '@mantine/notifications';
+import { NOTIFICATIONS } from '@/components/notifications/notifications';
 
 export const TextInput = ({ onSubmit }) => {
   const [query, setQuery] = useState('');
@@ -20,6 +22,8 @@ export const TextInput = ({ onSubmit }) => {
     if (query !== '') {
       onSubmit(query);
       setQuery('');
+    } else {
+      notifications.show(NOTIFICATIONS.error_nullquery);
     }
   };
 

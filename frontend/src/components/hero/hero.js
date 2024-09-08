@@ -5,12 +5,12 @@ import styles from './hero.module.css';
 import Image from 'next/image';
 
 import { notifications } from '@mantine/notifications';
-import { NOTIFICATIONS } from '@/app/_components/notifications/notifications';
+import { NOTIFICATIONS } from '@/components/notifications/notifications';
 
-import { TextInput } from '../elements/textinput';
-import { Chartoutput } from '../elements/chartoutput';
-import { TextComponent } from '../elements/textoutput';
-import { TableComponent } from '../elements/tableoutput';
+import { TextInput } from '@/components/elements/textinput';
+import { Chartoutput } from '@/components/elements/chartoutput';
+import { TextComponent } from '@/components/elements/textoutput';
+import { TableComponent } from '@/components/elements/tableoutput';
 
 export const HeroBody = () => {
   const [messages, setMessages] = useState([]);

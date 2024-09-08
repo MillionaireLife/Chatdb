@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useContext } from 'react';
-import { Select } from '@mantine/core';
-import { DiDatabase } from 'react-icons/di';
-import { stack } from '../../context/context';
 
+import { Select } from '@mantine/core';
+import { stack } from '@/context/context';
+import { DiDatabase } from 'react-icons/di';
 import { notifications } from '@mantine/notifications';
-import { NOTIFICATIONS } from '../notifications/notifications';
+import { NOTIFICATIONS } from '@/components/notifications/notifications';
 
 export const DBselect = () => {
   const [db, setDB] = useState('');

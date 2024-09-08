@@ -3,8 +3,8 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 
-import { ContextProvider } from './context/context';
-import { HeaderMenu } from './_components/header/header';
+import { ContextProvider } from '@/context/context';
+import { HeaderMenu } from '@/components/header/header';
 
 import '@mantine/notifications/styles.css';
 import '@mantine/charts/styles.css';

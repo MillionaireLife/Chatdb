@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useContext } from 'react';
-import { stack } from '../../context/context';
-import { DbDetails } from './dbdetails';
-import styles from './form.module.css';
 
+import styles from './form.module.css';
+import { DbDetails } from './dbdetails';
+import { stack } from '@/context/context';
 import { notifications } from '@mantine/notifications';
-import { NOTIFICATIONS } from '../notifications/notifications';
+import { NOTIFICATIONS } from '@/components/notifications/notifications';
 
 export const Form = () => {
   const { setDblist, setDbDetails } = useContext(stack);

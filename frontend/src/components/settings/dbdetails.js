@@ -1,9 +1,9 @@
 import React, { useEffect, useContext } from 'react';
-import { stack } from '../../context/context';
+import { stack } from '@/context/context';
 import styles from './dbdetails.module.css';
 
 import { notifications } from '@mantine/notifications';
-import { NOTIFICATIONS } from '../notifications/notifications';
+import { NOTIFICATIONS } from '@/components/notifications/notifications';
 
 export const DbDetails = () => {
   const { dbDetails, setDbDetails, setDblist } = useContext(stack);

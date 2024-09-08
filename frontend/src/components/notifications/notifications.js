@@ -14,14 +14,14 @@ const commonSettings = {
 
 const errorStyle = {
   color: 'red',
-  style: { backgroundColor: '#ef233c' },
   icon: <FaExclamation />,
+  style: { backgroundColor: '#ef233c' },
 };
 
 const successStyle = {
   color: 'green',
-  style: { backgroundColor: '#588157' },
   icon: <FaCheck />,
+  style: { backgroundColor: '#588157' },
 };
 
 export const NOTIFICATIONS = {
@@ -29,6 +29,13 @@ export const NOTIFICATIONS = {
     id: 'error-check-connection',
     title: 'Connection Error!',
     message: 'Please connect to the database first.',
+    ...commonSettings,
+    ...errorStyle,
+  },
+  error_nullquery: {
+    id: 'error-null-query',
+    title: 'Error!',
+    message: 'Please enter a query first.',
     ...commonSettings,
     ...errorStyle,
   },
